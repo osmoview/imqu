@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const Ext = ".imqu"
+
 // ImQuWriter is a structure required to write data to the file
 type ImQuWriter struct {
 	fn string

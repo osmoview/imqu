@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var testfile = "testdata/test.imqu"
+var testfile = "testdata/test" + Ext
 
 func init() {
 	log.SetFlags(log.Lshortfile)

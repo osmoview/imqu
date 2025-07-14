@@ -2,6 +2,8 @@ package imqu
 
 import (
 	"encoding/binary"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 	"time"
@@ -48,15 +50,24 @@ func (iq *ImQuReader) GetCount() int {
 
 // SeekFrame seek and returns a frame data nearest to specified duration offset
 func (iq *ImQuReader) SeekFrame(dur time.Duration) ([]byte, error) {
-	start := time.Now()
+	if _, err := iq.f.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+
+	var progress time.Duration
 
 	for {
 		p, err := iq.readPart()
 		if err != nil {
+			if errors.Is(err, io.EOF) {
+				return nil, fmt.Errorf("%s is more than a file duration %s", dur, progress)
+			}
 			return nil, err
 		}
 
-		if time.Since(start) > dur {
+		progress += p.wait
+
+		if progress >= dur {
 			return p.data, nil
 		}
 	}

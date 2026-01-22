@@ -91,16 +91,14 @@ func (iq *ImQuReader) NextFrame(speed int) ([]byte, error) {
 }
 
 // Duration returns total duration of imqu file by summing all wait_ns values
-func (iq *ImQuReader) Duration() (time.Duration) {
-	var totalDuration time.Duration
-
+func (iq *ImQuReader) Duration() (dur time.Duration) {
 	for {
 		part, err := iq.readPart()
 		if err != nil {
-			return totalDuration
+			return
 		}
 
-		totalDuration += time.Duration(part.wait) * time.Nanosecond
+		dur += part.wait
 	}
 }
 

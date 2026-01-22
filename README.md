@@ -1,4 +1,4 @@
-# ImQu 
+# ImQu
 
 Provide format to write and read data sequence/queues from the files.
 
@@ -9,11 +9,9 @@ Format description:
 [ wait ns ][ data size ][   data   ]...
 ```
 
-At the and of the file contains 8 bytes with count of frames in this file
-
+At the end, of the file contains 8 bytes with count of frames in this file
 
 ## Usage
-
 
 Write file:
 
@@ -26,8 +24,8 @@ iq.AddData(b)
 iq.AddDataWithTime(b, time)
 ```
 
-
 Read file:
+
 ```go
 iq, err := imqu.OpenImQu(fn)
 ...

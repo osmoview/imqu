@@ -43,7 +43,7 @@ func OpenImQu(fn string) (*ImQuReader, error) {
 	return &ImQuReader{f: f, count: int(count)}, nil
 }
 
-// GetCount returens a frames contains in this file
+// GetCount returns a frames contains in this file
 func (iq *ImQuReader) GetCount() int {
 	return iq.count
 }
@@ -88,6 +88,20 @@ func (iq *ImQuReader) NextFrame(speed int) ([]byte, error) {
 	iq.time = time.Now()
 
 	return p.data, nil
+}
+
+// Duration returns total duration of imqu file by summing all wait_ns values
+func (iq *ImQuReader) Duration() (time.Duration) {
+	var totalDuration time.Duration
+
+	for {
+		part, err := iq.readPart()
+		if err != nil {
+			return totalDuration
+		}
+
+		totalDuration += time.Duration(part.wait) * time.Nanosecond
+	}
 }
 
 type frame struct {
